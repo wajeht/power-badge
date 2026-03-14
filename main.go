@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"flag"
 )
 
 type badge struct {
@@ -24,6 +25,21 @@ type haState struct {
 }
 
 func main() {
+	health := flag.Bool("health", false, "run health check")
+	flag.Parse()
+
+	if *health {
+		port := os.Getenv("PORT")
+		if port == "" {
+			port = "80"
+		}
+		resp, err := http.Get("http://localhost:" + port + "/health")
+		if err != nil || resp.StatusCode != 200 {
+			os.Exit(1)
+		}
+		os.Exit(0)
+	}
+
 	haURL := os.Getenv("HA_URL")
 	haToken := os.Getenv("HA_TOKEN")
 	sensorID := os.Getenv("HA_SENSOR_ID")
