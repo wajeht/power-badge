@@ -2,12 +2,13 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
-	"flag"
+	"time"
 )
 
 type badge struct {
@@ -24,6 +25,8 @@ type haState struct {
 	} `json:"attributes"`
 }
 
+var client = &http.Client{Timeout: 5 * time.Second}
+
 func main() {
 	health := flag.Bool("health", false, "run health check")
 	flag.Parse()
@@ -33,7 +36,7 @@ func main() {
 		if port == "" {
 			port = "80"
 		}
-		resp, err := http.Get("http://localhost:" + port + "/health")
+		resp, err := http.Get("http://localhost:" + port + "/healthz")
 		if err != nil || resp.StatusCode != 200 {
 			os.Exit(1)
 		}
@@ -61,7 +64,7 @@ func main() {
 		}
 		req.Header.Set("Authorization", "Bearer "+haToken)
 
-		resp, err := http.DefaultClient.Do(req)
+		resp, err := client.Do(req)
 		if err != nil {
 			http.Error(w, "failed to reach home assistant", http.StatusBadGateway)
 			return
@@ -96,7 +99,7 @@ func main() {
 		json.NewEncoder(w).Encode(b)
 	})
 
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
 
