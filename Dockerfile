@@ -1,11 +1,10 @@
-FROM golang:1.24-alpine AS build
+FROM golang:1.26-alpine AS build
 WORKDIR /app
 COPY go.mod ./
 COPY main.go ./
 RUN CGO_ENABLED=0 go build -o power-badge .
 
-FROM scratch
-COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+FROM alpine
 COPY --from=build /app/power-badge /power-badge
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD ["/power-badge", "-health"]
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD wget -qO /dev/null http://localhost/healthz
 ENTRYPOINT ["/power-badge"]
