@@ -56,7 +56,8 @@ func main() {
 		port = "80"
 	}
 
-	http.HandleFunc("/badge", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+
 		req, err := http.NewRequest("GET", fmt.Sprintf("%s/api/states/%s", haURL, sensorID), nil)
 		if err != nil {
 			http.Error(w, "failed to create request", http.StatusInternalServerError)
