@@ -100,6 +100,6 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	log.Printf("listening on :%s", port)
+	log.Printf("power-badge listening on :%s", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
