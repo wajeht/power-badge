@@ -7,4 +7,5 @@ RUN CGO_ENABLED=0 go build -o power-badge .
 FROM scratch
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /app/power-badge /power-badge
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD ["/power-badge", "-health"]
 ENTRYPOINT ["/power-badge"]
