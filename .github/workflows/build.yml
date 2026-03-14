@@ -3,15 +3,33 @@ name: CI
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+
+      - name: Run tests
+        run: go test -v ./...
+
   build:
     name: Build
     runs-on: ubuntu-latest
+    needs: [test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     outputs:
       tag: ${{ steps.image-name.outputs.TAG }}
@@ -53,7 +71,7 @@ jobs:
 
   deploy:
     if: github.event_name == 'push'
-    needs: [build]
+    needs: [test, build]
     name: Deploy
     uses: wajeht/docker-cd-deploy-workflow/.github/workflows/deploy.yaml@v0.0.18
     with:

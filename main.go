@@ -26,22 +26,8 @@ type haState struct {
 
 var client = &http.Client{Timeout: 5 * time.Second}
 
-func main() {
-	haURL := os.Getenv("HA_URL")
-	haToken := os.Getenv("HA_TOKEN")
-	sensorID := os.Getenv("HA_SENSOR_ID")
-	port := os.Getenv("PORT")
-
-	if haURL == "" || haToken == "" || sensorID == "" {
-		log.Fatal("HA_URL, HA_TOKEN, HA_SENSOR_ID are required")
-	}
-
-	if port == "" {
-		port = "80"
-	}
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-
+func badgeHandler(haURL, haToken, sensorID string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		req, err := http.NewRequest("GET", fmt.Sprintf("%s/api/states/%s", haURL, sensorID), nil)
 		if err != nil {
 			http.Error(w, "failed to create request", http.StatusInternalServerError)
@@ -82,7 +68,24 @@ func main() {
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(b)
-	})
+	}
+}
+
+func main() {
+	haURL := os.Getenv("HA_URL")
+	haToken := os.Getenv("HA_TOKEN")
+	sensorID := os.Getenv("HA_SENSOR_ID")
+	port := os.Getenv("PORT")
+
+	if haURL == "" || haToken == "" || sensorID == "" {
+		log.Fatal("HA_URL, HA_TOKEN, HA_SENSOR_ID are required")
+	}
+
+	if port == "" {
+		port = "80"
+	}
+
+	http.HandleFunc("/", badgeHandler(haURL, haToken, sensorID))
 
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
