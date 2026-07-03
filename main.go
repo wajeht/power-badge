@@ -61,7 +61,7 @@ func badgeHandler(haURL, haToken, sensorID string) http.HandlerFunc {
 
 		b := badge{
 			SchemaVersion: 1,
-			Label:         "Power",
+			Label:         "power",
 			Message:       state.State + " " + unit,
 			Color:         "green",
 		}
