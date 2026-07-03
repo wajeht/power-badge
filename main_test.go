@@ -59,8 +59,8 @@ func TestBadge(t *testing.T) {
 	if b.SchemaVersion != 1 {
 		t.Errorf("expected schemaVersion 1, got %d", b.SchemaVersion)
 	}
-	if b.Label != "Power" {
-		t.Errorf("expected label Power, got %s", b.Label)
+	if b.Label != "power" {
+		t.Errorf("expected label power, got %s", b.Label)
 	}
 	if b.Message != "84.3 W" {
 		t.Errorf("expected message '84.3 W', got '%s'", b.Message)
