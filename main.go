@@ -63,7 +63,7 @@ func badgeHandler(haURL, haToken, sensorID string) http.HandlerFunc {
 			SchemaVersion: 1,
 			Label:         "power",
 			Message:       state.State + " " + unit,
-			Color:         "green",
+			Color:         "brightgreen",
 		}
 
 		w.Header().Set("Content-Type", "application/json")
