@@ -65,8 +65,8 @@ func TestBadge(t *testing.T) {
 	if b.Message != "84.3 W" {
 		t.Errorf("expected message '84.3 W', got '%s'", b.Message)
 	}
-	if b.Color != "green" {
-		t.Errorf("expected color green, got %s", b.Color)
+	if b.Color != "brightgreen" {
+		t.Errorf("expected color brightgreen, got %s", b.Color)
 	}
 }
 
