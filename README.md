@@ -1,6 +1,7 @@
 # Power Badge
 
 [![CI](https://github.com/wajeht/power-badge/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/wajeht/power-badge/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/wajeht/power-badge/blob/main/LICENSE)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/wajeht/power-badge)
 
 Display a Home Assistant power sensor as a dynamic [Shields.io endpoint badge](https://shields.io/badges/endpoint-badge).
@@ -48,3 +49,7 @@ https://img.shields.io/endpoint?url=https%3A%2F%2Fexample.com%2F
 ```sh
 go test ./...
 ```
+
+## License
+
+Distributed under the MIT License © [wajeht](https://github.com/wajeht). See [LICENSE](./LICENSE) for more information.
